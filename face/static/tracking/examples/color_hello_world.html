@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>tracking.js - color hello world</title>
+  <link rel="stylesheet" href="assets/demo.css">
+
+  <script src="../build/tracking-min.js"></script>
+
+  <style>
+  .rect {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: -1000px;
+    top: -1000px;
+  }
+  </style>
+</head>
+<body>
+  <div class="demo-title">
+    <p><a href="http://trackingjs.com" target="_parent">tracking.js</a> － detect certain colors in a image</p>
+  </div>
+
+  <div class="demo-frame">
+    <div class="demo-container">
+      <img id="img" src="assets/psmove.png" />
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      var img = document.getElementById('img');
+      var demoContainer = document.querySelector('.demo-container');
+
+      var tracker = new tracking.ColorTracker(['magenta', 'cyan', 'yellow']);
+
+      tracker.on('track', function(event) {
+        event.data.forEach(function(rect) {
+          window.plot(rect.x, rect.y, rect.width, rect.height, rect.color);
+        });
+      });
+
+      tracking.track('#img', tracker);
+
+      window.plot = function(x, y, w, h, color) {
+        var rect = document.createElement('div');
+        document.querySelector('.demo-container').appendChild(rect);
+        rect.classList.add('rect');
+        rect.style.border = '2px solid ' + color;
+        rect.style.width = w + 'px';
+        rect.style.height = h + 'px';
+        rect.style.left = (img.offsetLeft + x) + 'px';
+        rect.style.top = (img.offsetTop + y) + 'px';
+      };
+    };
+  </script>
+
+</body>
+</html>

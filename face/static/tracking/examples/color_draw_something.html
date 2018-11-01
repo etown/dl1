@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>tracking.js - draw something</title>
+  <link rel="stylesheet" href="assets/demo.css">
+
+  <script src="../build/tracking.js"></script>
+  <script src="assets/splines.min.js"></script>
+  <script src="assets/stats.min.js"></script>
+
+  <style>
+    #canvas,
+    #video {
+      height: 300px;
+      position: absolute;
+      width: 400px;
+      padding-top: 66px;
+    }
+    .draw-frame {
+      background: url(assets/draw_frame.png);
+      width: 400px;
+      height: 414px;
+      border: 1px solid #ccc;
+      top: 50%;
+      left: 50%;
+      position: absolute;
+      margin: -207px 0 0 -200px;
+    }
+
+    canvas, video {
+      -moz-transform: scale(-1, 1);
+      -o-transform: scale(-1, 1);
+      -webkit-transform: scale(-1, 1);
+      filter: FlipH;
+      transform: scale(-1, 1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="demo-title">
+    <p><a href="http://trackingjs.com" target="_parent">tracking.js</a> － use magenta color to draw and cyan to erase</p>
+  </div>
+
+  <div class="demo-frame">
+    <div class="demo-container">
+      <div class="draw-frame">
+        <video id="video" width="400" height="300" preload autoplay loop muted></video>
+        <canvas id="canvas" width="400" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      var video = document.getElementById('video');
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+
+      var drawSegments = [[]];
+      var segment = 0;
+
+      var tracker = new tracking.ColorTracker(['magenta', 'cyan']);
+
+      tracking.track('#video', tracker, { camera: true });
+
+      tracker.on('track', function(event) {
+        if (event.data.length === 0 && drawSegments[segment].length > 0) {
+          segment++;
+
+          if (!drawSegments[segment]) {
+            drawSegments[segment] = [];
+          }
+        }
+
+        event.data.forEach(function(rect) {
+          if (rect.color === 'magenta') {
+            draw(rect);
+          }
+          else if (rect.color === 'cyan') {
+            erase(rect);
+          }
+        });
+      });
+
+      function draw(rect) {
+        drawSegments[segment].push(rect.x + rect.width / 2, rect.y + rect.height / 2);
+      }
+
+      function erase(rect) {
+        context.clearRect(rect.x, rect.y, rect.width, rect.height);
+      }
+
+      function isInsideRect(x, y, rect) {
+        return rect.x <= x && x <= rect.x + rect.width &&
+            rect.y <= y && y <= rect.y + rect.height;
+      }
+
+      (function loop() {
+          for (var i = 0, len = drawSegments.length; i < len; i++) {
+              drawSpline(context, drawSegments[i], 0.5, false);
+          }
+
+          drawSegments = [drawSegments[drawSegments.length - 1]];
+          segment = 0;
+
+          requestAnimationFrame(loop);
+      }());
+    };
+  </script>
+
+</body>
+</html>
