@@ -4,8 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>tracking.js - face with camera</title>
-  <!-- <script src="../build/tracking-min.js"></script> -->
-  <script src="../build/tracking.js"></script>
+  <script src="../build/tracking-min.js"></script>
   <script src="../build/data/face-min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
@@ -135,6 +134,12 @@
           }).done(function (o) {
             if (o && o['predictions']) {
               jQuery('#result').html(JSON.stringify(o['predictions'], null, 2))
+              if(o['predictions']['duck'] > 2){
+                jQuery("body").css({
+                  "background-image": "url('./assets/rubberduckies.jpg')",
+                  "background-size": "cover"
+                })
+              }
           }
 	});
         });
