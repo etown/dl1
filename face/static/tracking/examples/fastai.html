@@ -23,7 +23,7 @@
   <canvas id="canvas" width="320" height="240" class="merge"></canvas>
   <canvas id="canvas1" style="margin-left: 500px"></canvas>
   <div id="result" style="margin-left: 500px"></div>
-  <img id="pic" src="./assets/rubberduckies.jpg" alt="Ducks" style="margin-left: 500px; margin-top: 20px; visibility: hidden" width="500">
+  <img id="pic" src="./assets/smiley_emoji.jpg" alt="Ducks" style="margin-left: 500px; margin-top: 20px; visibility: hidden" width="500">
 
   <!--suppress JSCheckFunctionSignatures -->
   <script>
@@ -135,7 +135,7 @@
           }).done(function (o) {
             if (o && o['predictions']) {
               jQuery('#result').html(JSON.stringify(o['predictions'], null, 2))
-              if(o['predictions']['duck'] > 2){
+              if(o['predictions']['happy'] > 2){
                 jQuery("#pic").css({
                   "visibility": "visible"
                 })

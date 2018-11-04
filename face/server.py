@@ -10,10 +10,12 @@ import uvicorn
 from fastai import *
 from fastai.vision import *
 
-classes = ['duck', 'fish']
-data = ImageDataBunch.single_from_classes('', classes, tfms=get_transforms(), size=224).normalize(imagenet_stats)
+classes = ['sad', 'happy', 'neutral',
+            'angry', 'surprise', 'disgust', 'fear']
+
+data = ImageDataBunch.single_from_classes('', classes, tfms=get_transforms(), size=196).normalize(imagenet_stats)
 learner = create_cnn(data, models.resnet34)
-learner.load('duck-post-clean-stage-2')
+learner.load('gokul-sentiment-stage-5n')
 
 app = Router(routes=[
     Mount('/static', app=StaticFiles(directory='static')),
