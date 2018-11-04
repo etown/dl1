@@ -68,6 +68,7 @@
     }).then(function(stream) {
       element.srcObject = stream;
     }).catch(function(err) {
+      console.log("err!!", err)
       throw Error('Cannot capture user camera.');
     });
   };
