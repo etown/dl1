@@ -133,11 +133,10 @@
               imgBase64: dataURL.split(',')[1]
             }
           }).done(function (o) {
-            if (o && o[0] && o[0].faceAttributes) {
-              jQuery('#result').html(JSON.stringify(o[0].faceAttributes.emotion, null, 2))
-            }
-          });
-
+            if (o && o['predictions']) {
+              jQuery('#result').html(JSON.stringify(o['predictions'], null, 2))
+          }
+	});
         });
       });
     };

@@ -2,7 +2,7 @@ from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 from starlette.routing import Router, Mount
 from starlette.staticfiles import StaticFiles
-# from binascii import a2b_base64
+from binascii import a2b_base64
 from io import BytesIO
 import requests
 import os
@@ -11,9 +11,9 @@ from fastai import *
 from fastai.vision import *
 
 classes = ['duck', 'fish']
-data = ImageDataBunch.single_from_classes(None, classes, tfms=get_transforms(), size=224).normalize(imagenet_stats)
+data = ImageDataBunch.single_from_classes('', classes, tfms=get_transforms(), size=224).normalize(imagenet_stats)
 learner = create_cnn(data, models.resnet34)
-learner.load('./duck-fish.pth')
+learner.load('duck-post-clean-stage-2')
 
 app = Router(routes=[
     Mount('/static', app=StaticFiles(directory='static')),
@@ -26,19 +26,20 @@ async def homepage(request):
 @app.route('/face', methods=["GET","POST"])
 async def face(request):
     body = await request.form()
-    # binary_data = a2b_base64(body['imgBase64'])
+    binary_data = a2b_base64(body['imgBase64'])
     # fd = open('image.png', 'wb')
     # fd.write(binary_data)
     # fd.close()
-    img = open_image(BytesIO(body))
+    img = open_image(BytesIO(binary_data))
     _,_,losses = learner.predict(img)
-    return JSONResponse({
-        "predictions": sorted(
+    analysis = {
+        "predictions": dict(sorted(
             zip(learner.data.classes, map(float, losses)),
             key=lambda p: p[1],
             reverse=True
-        )
-    })
+        ))}
+    print("analysis!!", analysis)
+    return JSONResponse(analysis)
     # params = {
     #     'returnFaceId': 'true',
     #     'returnFaceLandmarks': 'false',
