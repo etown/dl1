@@ -17,12 +17,13 @@
   </style>
 </head>
 
-<body style="background: #000000">
+<body style="background: #4c88e2e5">
 
   <video id="video" width="320" height="240" preload autoplay loop muted class="merge"></video>
   <canvas id="canvas" width="320" height="240" class="merge"></canvas>
   <canvas id="canvas1" style="margin-left: 500px"></canvas>
   <div id="result" style="margin-left: 500px"></div>
+  <img id="pic" src="./assets/rubberduckies.jpg" alt="Ducks" style="margin-left: 500px; margin-top: 20px; visibility: hidden" width="500">
 
   <!--suppress JSCheckFunctionSignatures -->
   <script>
@@ -81,7 +82,7 @@
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
 
- 
+
       var canvas = document.getElementById('canvas');
       var context = canvas.getContext('2d');
       var canvas1 = document.getElementById('canvas1');
@@ -135,13 +136,12 @@
             if (o && o['predictions']) {
               jQuery('#result').html(JSON.stringify(o['predictions'], null, 2))
               if(o['predictions']['duck'] > 2){
-                jQuery("body").css({
-                  "background-image": "url('./assets/rubberduckies.jpg')",
-                  "background-size": "cover"
+                jQuery("#pic").css({
+                  "visibility": "visible"
                 })
               } else {
-                jQuery("body").css({
-                  "background": "#000000"
+                jQuery("#pic").css({
+                  "visibility": "hidden"
                 })
               }
           }
