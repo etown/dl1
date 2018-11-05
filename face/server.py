@@ -10,8 +10,7 @@ import uvicorn
 from fastai import *
 from fastai.vision import *
 
-classes = ['sad', 'happy', 'neutral',
-            'angry', 'surprise', 'disgust', 'fear']
+classes = ['Anger', 'Disgust', 'Surprise', 'Sadness', 'Happiness', 'Neutral', 'Contempt', 'Fear']
 
 data = ImageDataBunch.single_from_classes('', classes, tfms=get_transforms(), size=196).normalize(imagenet_stats)
 learner = create_cnn(data, models.resnet34)
