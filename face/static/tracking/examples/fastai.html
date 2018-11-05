@@ -135,7 +135,7 @@
           }).done(function (o) {
             if (o && o['predictions']) {
               jQuery('#result').html(JSON.stringify(o['predictions'], null, 2))
-              if(o['predictions']['happy'] > 2){
+              if(o['predictions']['Happiness'] > 5){
                 jQuery("#pic").css({
                   "visibility": "visible"
                 })
