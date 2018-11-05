@@ -17,12 +17,13 @@
   </style>
 </head>
 
-<body style="background: #dddddd">
+<body style="background: #4c88e2e5">
 
   <video id="video" width="320" height="240" preload autoplay loop muted class="merge"></video>
   <canvas id="canvas" width="320" height="240" class="merge"></canvas>
   <canvas id="canvas1" style="margin-left: 500px"></canvas>
   <div id="result" style="margin-left: 500px"></div>
+  <img id="pic" src="./assets/smiley_emoji.jpg" alt="Ducks" style="margin-left: 500px; margin-top: 20px; visibility: hidden" width="500">
 
   <!--suppress JSCheckFunctionSignatures -->
   <script>
@@ -81,7 +82,7 @@
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
 
- 
+
       var canvas = document.getElementById('canvas');
       var context = canvas.getContext('2d');
       var canvas1 = document.getElementById('canvas1');
@@ -132,11 +133,19 @@
               imgBase64: dataURL.split(',')[1]
             }
           }).done(function (o) {
-            if (o && o[0] && o[0].faceAttributes) {
-              jQuery('#result').html(JSON.stringify(o[0].faceAttributes.emotion, null, 2))
-            }
-          });
-
+            if (o && o['predictions']) {
+              jQuery('#result').html(JSON.stringify(o['predictions'], null, 2))
+              if(o['predictions']['Happiness'] > 5){
+                jQuery("#pic").css({
+                  "visibility": "visible"
+                })
+              } else {
+                jQuery("#pic").css({
+                  "visibility": "hidden"
+                })
+              }
+          }
+	});
         });
       });
     };
