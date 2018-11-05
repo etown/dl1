@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>fastai</title>
+    <script src="https://github.com/muaz-khan/DetectRTC/releases/download/1.3.6/DetectRTC.js"></script>
     <script src="/static/tracking/build/tracking-min.js"></script>
     <script src="/static/tracking/build/data/face-min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
@@ -36,6 +37,11 @@
     <div id="result_display" class="result_display"></div>
 
     <script>
+        if (DetectRTC.isWebRTCSupported === false || DetectRTC.isGetUserMediaSupported === false) {
+            alert('WebRTC is required, please use a browser that supports it. If you are on iOS, make sure you are using Safari and not an embedded web browser.');
+        }
+
+
         tracking.trackVideo_ = function (element, tracker, options) {
             var canvas = document.createElement('canvas');
             var context = canvas.getContext('2d');
