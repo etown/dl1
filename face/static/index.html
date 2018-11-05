@@ -37,6 +37,9 @@
     <div id="result_display" class="result_display"></div>
 
     <script>
+        if (location.protocol != 'https:') {
+            location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+        }
         if (DetectRTC.isWebRTCSupported === false || DetectRTC.isGetUserMediaSupported === false) {
             alert('WebRTC is required, please use a browser that supports it. If you are on iOS, make sure you are using Safari and not an embedded web browser.');
         }
@@ -178,7 +181,7 @@
             tracker.setInitialScale(3);
             tracker.setStepSize(2);
             tracker.setEdgesDensity(0.1);
-            tracking.track('#video', tracker, { camera: true, fps:/Mobi|Android/i.test(navigator.userAgent)? 3:30 });
+            tracking.track('#video', tracker, { camera: true, fps: /Mobi|Android/i.test(navigator.userAgent) ? 3 : 30 });
             var last = Date.now();
             var lastResult;
             tracker.on('track', function (event) {
