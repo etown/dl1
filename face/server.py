@@ -2,9 +2,9 @@ from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 from starlette.routing import Router, Mount
 from starlette.staticfiles import StaticFiles
+from starlette.responses import FileResponse
 from binascii import a2b_base64
 from io import BytesIO
-import requests
 import os
 import uvicorn
 from fastai import *
@@ -21,7 +21,7 @@ app = Router(routes=[
 ])
 @app.route('/')
 async def homepage(request):
-    return JSONResponse({'hello': 'world'})
+    return FileResponse('static/index.html')
 
 
 @app.route('/face', methods=["GET","POST"])
@@ -36,9 +36,7 @@ async def face(request):
             key=lambda p: p[1],
             reverse=True
         ))}
-    print("analysis: ", analysis)
     return JSONResponse(analysis)
-
 
 
 if __name__ == '__main__':

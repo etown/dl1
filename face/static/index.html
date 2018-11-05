@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>fastai</title>
+    <script src="/static/tracking/build/tracking-min.js"></script>
+    <script src="/static/tracking/build/data/face-min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <style>
+        .merge {
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .result_display {
+            left: 50%;
+            position: absolute;
+            top: 20%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body style="background: #4c88e2e5">
+
+
+    <canvas id="canvas1" style="display:none"></canvas>
+    <div id="result" style="margin-left: 500px;display:none"></div>
+    <div id="result_display" class="result_display"></div>
+
+    <script>
+        tracking.trackVideo_ = function (element, tracker, options) {
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            var width;
+            var height;
+
+            options = options || {}
+            options.fps = options.fps || 30
+
+            var fpsInterval, now, then, elapsed;
+
+            var resizeCanvas_ = function () {
+                width = element.offsetWidth;
+                height = element.offsetHeight;
+                canvas.width = width;
+                canvas.height = height;
+            };
+            resizeCanvas_();
+            element.addEventListener('resize', resizeCanvas_);
+
+            var requestId;
+            var requestAnimationFrame_ = function () {
+                requestId = window.requestAnimationFrame(function () {
+                    requestAnimationFrame_();
+
+                    // calc elapsed time since last loop
+                    now = Date.now();
+                    elapsed = now - then;
+
+                    // if enough time has elapsed, draw the next frame
+                    if (elapsed > fpsInterval) {
+                        // Get ready for next frame by setting then=now, but also adjust for your
+                        // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+                        then = now - (elapsed % fpsInterval);
+
+                        if (element.readyState === element.HAVE_ENOUGH_DATA) {
+                            try {
+                                // Firefox v~30.0 gets confused with the video readyState firing an
+                                // erroneous HAVE_ENOUGH_DATA just before HAVE_CURRENT_DATA state,
+                                // hence keep trying to read it until resolved.
+                                context.drawImage(element, 0, 0, width, height);
+                            } catch (err) { }
+                            tracking.trackCanvasInternal_(canvas, tracker);
+                        }
+                    }
+                });
+            };
+
+            var task = new tracking.TrackerTask(tracker);
+            task.on('stop', function () {
+                window.cancelAnimationFrame(requestId);
+            });
+            task.on('run', function () {
+                fpsInterval = 1000 / options.fps;
+                then = Date.now();
+                requestAnimationFrame_();
+            });
+            return task.run();
+        };
+
+        var video = document.createElement('video');
+        var width = ($(window).width() * 0.4) + "px";
+        var height = ($(window).height() * 0.4) + "px";
+        video.setAttribute("id", "video")
+        video.setAttribute("class", "merge")
+        video.setAttribute("width", width)
+        video.setAttribute("height", height)
+        video.style.width = width;
+        video.style.height = height;
+        document.body.append(video)
+        var emojiMap = {
+            'Anger': '😡', 'Disgust': '🤢', 'Surprise': '😮', 'Sadness': '😞', 'Happiness': '😃', 'Neutral': '😐', 'Contempt': '😠', 'Fear': '😱'
+        };
+
+        function trim(c) {
+            var ctx = c.getContext('2d'),
+                copy = document.createElement('canvas').getContext('2d'),
+                pixels = ctx.getImageData(0, 0, c.width, c.height),
+                l = pixels.data.length,
+                i,
+                bound = {
+                    top: null,
+                    left: null,
+                    right: null,
+                    bottom: null
+                },
+                x, y;
+            for (i = 0; i < l; i += 4) {
+                if (pixels.data[i + 3] !== 0) {
+                    x = (i / 4) % c.width;
+                    y = ~~((i / 4) / c.width);
+                    if (bound.top === null) {
+                        bound.top = y;
+                    }
+                    if (bound.left === null) {
+                        bound.left = x;
+                    } else if (x < bound.left) {
+                        bound.left = x;
+                    }
+                    if (bound.right === null) {
+                        bound.right = x;
+                    } else if (bound.right < x) {
+                        bound.right = x;
+                    }
+                    if (bound.bottom === null) {
+                        bound.bottom = y;
+                    } else if (bound.bottom < y) {
+                        bound.bottom = y;
+                    }
+                }
+            }
+            var trimHeight = bound.bottom - bound.top,
+                trimWidth = bound.right - bound.left,
+                trimmed = ctx.getImageData(bound.left, bound.top, trimWidth, trimHeight);
+            copy.canvas.width = trimWidth;
+            copy.canvas.height = trimHeight;
+            copy.putImageData(trimmed, 0, 0);
+            // open new window with trimmed image:
+            return copy.canvas;
+        }
+
+        window.onload = function () {
+            var video = document.getElementById('video');
+
+            video.setAttribute('autoplay', '');
+            video.setAttribute('muted', '');
+            video.setAttribute('playsinline', '');
+
+
+            var isMobile = window.matchMedia("only screen and (max-width: 760px)");
+            var canvas1 = document.getElementById('canvas1');
+            var context1 = canvas1.getContext('2d');
+            var tracker = new tracking.ObjectTracker('face');
+            tracker.setInitialScale(3);
+            tracker.setStepSize(2);
+            tracker.setEdgesDensity(0.1);
+            tracking.track('#video', tracker, { camera: true, fps:/Mobi|Android/i.test(navigator.userAgent)? 3:30 });
+            var last = Date.now();
+            var lastResult;
+            tracker.on('track', function (event) {
+                event.data.forEach(function (rect) {
+
+                    if (Date.now() - last < 500) {
+                        return
+                    }
+                    last = Date.now()
+                    var c1 = document.createElement('canvas');
+                    var ctx1 = c1.getContext('2d');
+                    c1.width = video.width;
+                    c1.height = video.height;
+                    ctx1.translate(-rect.x, -rect.y);
+                    ctx1.drawImage(video, 0, 0, video.width, video.height);
+
+                    var c2 = document.createElement('canvas');
+                    var ctx2 = c2.getContext('2d');
+                    c2.width = video.width;
+                    c2.height = video.height;
+                    ctx2.translate(video.width - rect.width, video.height - rect.height);
+                    ctx2.drawImage(c1, 0, 0, video.width, video.height);
+                    var faceCanvas = trim(c2);
+
+                    canvas1.width = faceCanvas.width;
+                    canvas1.height = faceCanvas.height;
+                    context1.drawImage(faceCanvas, 0, 0, faceCanvas.width, faceCanvas.height);
+                    var dataURL = canvas1.toDataURL();
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "/face",
+                        data: {
+                            imgBase64: dataURL.split(',')[1]
+                        }
+                    }).done(function (o) {
+                        if (o && o['predictions']) {
+                            var result = ['Neutral', 0];
+
+                            for (item in o['predictions']) {
+                                if (o['predictions'][item] > result[1]) {
+                                    result = [item, o['predictions'][item]]
+                                }
+                            }
+                            jQuery('#result').html(JSON.stringify(result, null, 2))
+                            if (result[1] < 20) {
+                                result = ['Neutral', 0];
+                            }
+                            if (!lastResult || lastResult[0] != result[0]) {
+                                jQuery('#result_display').html('<h1 class="animated rubberBand">' + emojiMap[result[0]] + '</h1>')
+                            }
+                            lastResult = result
+                        }
+                    });
+                });
+            });
+        };
+    </script>
+</body>
+
+</html>
