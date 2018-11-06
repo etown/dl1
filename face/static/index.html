@@ -26,6 +26,24 @@
             font-size: 80px;
             z-index: 1000;
         }
+
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        a,
+        p {
+            text-decoration: none;
+            color: #4a4444;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 
@@ -35,7 +53,17 @@
     <canvas id="canvas1" style="display:none"></canvas>
     <div id="result" style="margin-left: 500px;display:none"></div>
     <div id="result_display" class="result_display"></div>
+    <div id="footer">
+        <p>Powered by
+            <a href="https://github.com/fastai/fastai" target="_blank">⚡ fastai</a>
+        </p>
+        <p>Built by team 26:
+            <a href="https://twitter.com/notfollowingyet" target="_blank">Lauren</a>,
+            <a href="https://twitter.com/miragegokul" target="_blank">Gokul</a>,
+            <a href="https://twitter.com/EthanSutin" target="_blank">Ethan</a>
+        </p>
 
+    </div>
     <script>
         if (location.protocol != 'https:') {
             location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
