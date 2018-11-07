@@ -7,6 +7,7 @@
     <script src="https://github.com/muaz-khan/DetectRTC/releases/download/1.3.6/DetectRTC.js"></script>
     <script src="/static/tracking/build/tracking-min.js"></script>
     <script src="/static/tracking/build/data/face-min.js"></script>
+    <script src="//twemoji.maxcdn.com/2/twemoji.min.js?11.2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
@@ -162,7 +163,7 @@
         video.style.height = height;
         document.body.append(video)
         var emojiMap = {
-            'Anger': '😡', 'Disgust': '🤢', 'Surprise': '😮', 'Sadness': '😞', 'Happiness': '😃', 'Neutral': '😐', 'Contempt': '😠', 'Fear': '😱', 'Duck': '🦆'
+            'Anger': '😡', 'Disgust': '🤢', 'Surprise': '😮', 'Sadness': '😞', 'Happiness': '😃', 'Neutral': twemoji.parse('\u2764\uFE0F'), 'Contempt': '😠', 'Fear': '😱', 'Duck': '🦆'
         };
 
         function trim(c) {

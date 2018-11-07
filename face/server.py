@@ -36,7 +36,7 @@ async def face(request):
     binary_data = a2b_base64(body['imgBase64'])
     img = open_image(BytesIO(binary_data))
     _,_,duckLosses = learner2.predict(img)
-    duckScore = map(float, duckLosses[0])
+    duckScore = list(map(float, duckLosses))[0]
     
     print("duckScore!!", duckScore)
     if duckScore >= 20:
