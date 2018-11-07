@@ -59,7 +59,7 @@
 
 
     <canvas id="canvas1" style="display:none"></canvas>
-    <div id="result" style="margin-left: 500px;display:none"></div>
+    <div id="result" style="margin-left: 500px"></div>
     <div id="result_display" class="result_display"></div>
     <div id="footer">
         <p>Powered by
@@ -73,9 +73,9 @@
 
     </div>
     <script>
-        if (location.protocol != 'https:') {
-            location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-        }
+        // if (location.protocol != 'https:') {
+            // location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+        // }
         if (DetectRTC.isWebRTCSupported === false || DetectRTC.isGetUserMediaSupported === false) {
             alert('WebRTC is required, please use a browser that supports it. If you are on iOS, make sure you are using Safari and not an embedded web browser.');
         }
@@ -162,7 +162,7 @@
         video.style.height = height;
         document.body.append(video)
         var emojiMap = {
-            'Anger': '😡', 'Disgust': '🤢', 'Surprise': '😮', 'Sadness': '😞', 'Happiness': '😃', 'Neutral': '😐', 'Contempt': '😠', 'Fear': '😱'
+            'Anger': '😡', 'Disgust': '🤢', 'Surprise': '😮', 'Sadness': '😞', 'Happiness': '😃', 'Neutral': '😐', 'Contempt': '😠', 'Fear': '😱', 'Duck': '🦆'
         };
 
         function trim(c) {
@@ -264,6 +264,7 @@
                             imgBase64: dataURL.split(',')[1]
                         }
                     }).done(function (o) {
+                        console.log("o!!", o)
                         if (o && o['predictions']) {
                             var result = ['Neutral', 0];
 

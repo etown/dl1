@@ -16,6 +16,12 @@ data = ImageDataBunch.single_from_classes('', classes, tfms=get_transforms(), si
 learner = create_cnn(data, models.resnet34)
 learner.load('gokul-sentiment-stage-5n')
 
+classes2 = ['duck', 'fish']
+
+data2 = ImageDataBunch.single_from_classes('', classes2, tfms=get_transforms(), size=224).normalize(imagenet_stats)
+learner2 = create_cnn(data2, models.resnet34)
+learner2.load('duck-post-clean-stage-2')
+
 app = Router(routes=[
     Mount('/static', app=StaticFiles(directory='static')),
 ])
@@ -29,6 +35,15 @@ async def face(request):
     body = await request.form()
     binary_data = a2b_base64(body['imgBase64'])
     img = open_image(BytesIO(binary_data))
+    _,_,duckLosses = learner2.predict(img)
+    duckScore = map(float, duckLosses[0])
+    
+    print("duckScore!!", duckScore)
+    if duckScore >= 20:
+        return JSONResponse({
+            "predictions": {"Duck": duckScore}
+        })
+
     _,_,losses = learner.predict(img)
     analysis = {
         "predictions": dict(sorted(
