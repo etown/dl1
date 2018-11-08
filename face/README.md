@@ -56,4 +56,9 @@ Every time the `/face` route is hit, our Learner will evaluate the image sent in
 
 `{'predictions': {'Happiness': 29.584692001342773, 'Sadness': 1.511526346206665, 'Neutral': 0.5242078900337219, 'Fear': 0.33813756704330444, 'Contempt': 0.29101505875587463, 'Surprise': 0.282543420791626, 'Anger': 0.1381775140762329, 'Disgust': 0.10192008316516876}}`
 
+## Web Client
+We want the recognition to be as smooth and real-time as possible. We also want to distribute on the web. We can take advantage of webRTC to capture frames from the camera video stream, send them to our inference server and then display the results. However, in order to maximize the responsiveness, we need to send images fairly frequently. In order to reduce the network overhead, we use [trackingjs](https://trackingjs.com/) to first track the face, crop it, and then finally only send the face to the server. By first cropping the face, we can drastically reduce the latency.
+
+We get the cropped face, draw it to a different canvas, and then use `toDataURL()` to send the base64 face image to the server.
+
 
