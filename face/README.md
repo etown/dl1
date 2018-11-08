@@ -1,14 +1,13 @@
-# Real-time emotion evaluator!!
+# Real-time emotion evaluator
 
 ### To run locally:
   - Install fastai, starlette and uvicorn
   - `python server.py`
-  - Go to http://localhost:8000/static/index.html
-
+  - Go to http://localhost:8000/ (many browsers require https for webRTC)
 
 ## Inference Server
 
-Once we had a trained model, it was time to share it with the world. Creating a server was pretty simple. We used the [Starlette](https://www.starlette.io/) framework. Starlette was so easy to use and has such great documentation that I hardly missed node.js at all.
+Once we had a trained model, it was time to share it with the world. Creating a server was pretty simple. We used the [Starlette](https://www.starlette.io/) framework.
 
 First, in our server file outside of any route, we had to create a [Learner](https://docs.fast.ai/basic_train.html#Learner) similar to the one we used to train our model. So, we (1) define our classes in the same way we did when training, (2) instantiate an ImageDataBunch and (3) instantiate a Learner from that ImageDataBunch.
 
