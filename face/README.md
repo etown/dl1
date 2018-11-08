@@ -1,4 +1,9 @@
 # Real-time emotion evaluator
+[![video](https://img.youtube.com/vi/XhkCfwK7OBA/0.jpg)](https://www.youtube.com/watch?v=XhkCfwK7OBA)
+
+
+### Live demo:
+[fastai.mollyai.com](https://fastai.mollyai.com/)
 
 ### To run locally:
   - Install fastai, starlette and uvicorn
