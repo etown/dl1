@@ -46,6 +46,10 @@
             text-align: center;
         }
 
+        #checkbox {
+            vertical-align: bottom;
+        }
+
         a,
         p {
             text-decoration: none;
@@ -59,9 +63,13 @@
 
 
     <canvas id="canvas1" style="display:none"></canvas>
-    <div id="result" style="margin-left: 500px;display:none"></div>
+    <div id="result" style="display:none;width: 200px;"></div>
     <div id="result_display" class="result_display"></div>
     <div id="footer">
+        <p>
+            <label>
+                <input type="checkbox" name="checkbox" id="checkbox" value="value">Show details</label>
+        </p>
         <p>Powered by
             <a href="https://github.com/fastai/fastai" target="_blank">⚡ fastai</a>
         </p>
@@ -69,6 +77,9 @@
             <a href="https://twitter.com/notfollowingyet" target="_blank">Lauren</a>,
             <a href="https://twitter.com/miragegokul" target="_blank">Gokul</a>,
             <a href="https://twitter.com/EthanSutin" target="_blank">Ethan</a>
+        </p>
+        <p>
+            <a href="https://github.com/etown/dl1/blob/master/face/README.md" target="_blank">CODE</a>
         </p>
 
     </div>
@@ -79,7 +90,15 @@
         if (DetectRTC.isWebRTCSupported === false || DetectRTC.isGetUserMediaSupported === false) {
             alert('WebRTC is required, please use a browser that supports it. If you are on iOS, make sure you are using Safari and not an embedded web browser.');
         }
-
+        $("#checkbox").change(function () {
+            if ($('#checkbox').prop('checked')) {
+                $("#result").show()
+                $("#canvas1").show()
+            } else {
+                $("#result").hide()
+                $("#canvas1").hide()
+            }
+        });
         tracking.initUserMedia_ = function (element, opt_options) {
             window.navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -228,7 +247,7 @@
             tracker.setInitialScale(3);
             tracker.setStepSize(2);
             tracker.setEdgesDensity(0.1);
-            tracking.track('#video', tracker, { camera: true, fps: /Mobi|Android/i.test(navigator.userAgent) ? 3 : 30 });
+            tracking.track('#video', tracker, { camera: true, fps: /Mobi|Android/i.test(navigator.userAgent) ? 5 : 30 });
             var last = Date.now();
             var lastResult;
             tracker.on('track', function (event) {
@@ -272,7 +291,7 @@
                                     result = [item, o['predictions'][item]]
                                 }
                             }
-                            jQuery('#result').html(JSON.stringify(result, null, 2))
+                            jQuery('#result').html(JSON.stringify(o['predictions'], null, 2))
                             if (result[1] < 20) {
                                 result = ['Neutral', 0];
                             }
