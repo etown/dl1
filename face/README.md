@@ -5,6 +5,15 @@
   - `python server.py`
   - Go to http://localhost:8000/ (many browsers require https for webRTC)
 
+## The Model
+In order to distinguish different facial expressions, we chose to train the model on the [AffectNet](http://mohammadmahoor.com/wp-content/uploads/2017/08/AffectNet_oneColumn-2.pdf) dataset. This is a phenomenal data set of 450,000 manually annotated face images.
+
+For example:
+
+![Image of faces](https://github.com/etown/dl1/raw/master/face/example_faces.png)
+
+For much more information on training, please check out the [notebook](https://github.com/etown/dl1/blob/master/face/Facial_Emotion_Recogonition.ipynb).
+
 ## Inference Server
 
 Once we had a trained model, it was time to share it with the world. Creating a server was pretty simple. We used the [Starlette](https://www.starlette.io/) framework.
