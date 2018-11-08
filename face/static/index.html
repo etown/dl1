@@ -88,8 +88,13 @@
             alert('WebRTC is required, please use a browser that supports it. If you are on iOS, make sure you are using Safari and not an embedded web browser.');
         }
         $("#checkbox").change(function () {
-            $("#result").toggle()
-            $("#canvas1").toggle()
+            if ($('#checkbox').prop('checked')) {
+                $("#result").show()
+                $("#canvas1").show()
+            } else {
+                $("#result").hide()
+                $("#canvas1").hide()
+            }
         });
         tracking.initUserMedia_ = function (element, opt_options) {
             window.navigator.mediaDevices.getUserMedia({
@@ -163,8 +168,8 @@
         };
 
         var video = document.createElement('video');
-        var width = ($(window).width() * 0.4) + "px";
-        var height = ($(window).height() * 0.4) + "px";
+        var width = ($(window).width() * 0.45) + "px";
+        var height = ($(window).height() * 0.45) + "px";
         video.setAttribute("id", "video")
         video.setAttribute("class", "merge")
         video.setAttribute("width", width)
@@ -239,7 +244,7 @@
             tracker.setInitialScale(3);
             tracker.setStepSize(2);
             tracker.setEdgesDensity(0.1);
-            tracking.track('#video', tracker, { camera: true, fps: /Mobi|Android/i.test(navigator.userAgent) ? 3 : 30 });
+            tracking.track('#video', tracker, { camera: true, fps: /Mobi|Android/i.test(navigator.userAgent) ? 5 : 30 });
             var last = Date.now();
             var lastResult;
             tracker.on('track', function (event) {
