@@ -47,7 +47,7 @@
         }
 
         #checkbox {
-            vertical-align: bottom; 
+            vertical-align: bottom;
         }
 
         a,
@@ -66,7 +66,10 @@
     <div id="result" style="display:none;width: 200px;"></div>
     <div id="result_display" class="result_display"></div>
     <div id="footer">
-            <p><label><input type="checkbox" name="checkbox" id="checkbox" value="value">Show details</label></p>
+        <p>
+            <label>
+                <input type="checkbox" name="checkbox" id="checkbox" value="value">Show details</label>
+        </p>
         <p>Powered by
             <a href="https://github.com/fastai/fastai" target="_blank">⚡ fastai</a>
         </p>
@@ -84,10 +87,10 @@
         if (DetectRTC.isWebRTCSupported === false || DetectRTC.isGetUserMediaSupported === false) {
             alert('WebRTC is required, please use a browser that supports it. If you are on iOS, make sure you are using Safari and not an embedded web browser.');
         }
-$("#checkbox").change(function() {
-    $("#result").toggle()
-    $("#canvas1").toggle()
-});
+        $("#checkbox").change(function () {
+            $("#result").toggle()
+            $("#canvas1").toggle()
+        });
         tracking.initUserMedia_ = function (element, opt_options) {
             window.navigator.mediaDevices.getUserMedia({
                 video: true,
