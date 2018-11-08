@@ -1,10 +1,9 @@
-# Real-time emotion evaluator!!
+# Real-time emotion evaluator
 
 ### To run locally:
   - Install fastai, starlette and uvicorn
   - `python server.py`
-  - Go to http://localhost:8000/static/index.html
-
+  - Go to http://localhost:8000/ (many browsers require https for webRTC)
 
 ## Inference Server
 
